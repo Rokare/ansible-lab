@@ -1,0 +1,23 @@
+---
+- name: test command
+  hosts: cs01
+  become: yes 
+  gather_facts: False
+  collections:
+    - arubanetworks.aoscx
+  
+  tasks:
+    - name: show run command
+      aoscx_command:
+        commands:
+          - auto-confirm
+          - show run 
+          - show access-list
+      register: result
+
+
+    - name: show result
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ result.stdout_lines }}"
+

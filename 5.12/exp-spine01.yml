@@ -1,0 +1,57 @@
+---
+- name: configure spine01 for expansion
+  hosts: spine01
+  become: true
+  vars:
+    routes:
+     - { dest: "0.0.0.0/0", interface: "eth5", next_hop: "172.16.2.2" }
+     - { dest: "10.10.10.0/16", interface: "eth1", next_hop: "10.10.5.2" } 
+  vars_files:
+    - vars/expansion-data.yml
+
+  tasks:
+    - name: make sure ospf is not enabled
+      eos_config:
+        lines:
+          - no router ospf 1
+          - no router ospf general
+        save_when: modified
+    
+    - name: label interface
+      eos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description }}"
+      loop: "{{ intr_descr[inventory_hostname] }}"
+
+    - name: configure layer 3
+      eos_l3_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            ipv4:
+              - address: "{{ item.ipv4 }}"
+      loop: "{{ layer3_data[inventory_hostname] }}"
+
+    - name: show routes
+      debug:
+        msg: "Dest: {{ item.dest }}, Interface: {{ item.interface }}, Next Hop: {{ item.next_hop }}"
+      loop: "{{ routes }}"
+    
+    - name: add static routes
+      arista.eos.eos_static_routes:
+        config:
+          - address_families:
+              - afi: ipv4
+                routes:
+                  - dest: "{{ item.dest }}"
+                    next_hops:
+                      - forward_router_address: "{{ item.next_hop }}"
+                        interface: "{{ item.interface }}"
+        state: replaced          
+      loop: "{{ routes }}"
+                # - dest: 10.10.10.0
+                #   next_hops:
+                #   - forward_router_address: 10.10.5.2
+                #     interface: eth1
+
+

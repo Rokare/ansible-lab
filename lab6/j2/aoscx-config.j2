@@ -1,0 +1,17 @@
+access-list ip 101
+    10 permit tcp any any eq 22 count
+    {#  permit ip any any  #}
+exit
+
+interface 1/1/2
+    apply access-list ip 101 in
+exit
+
+ssh server vrf default
+
+
+{# 
+apply access-list ip 101 control-plane vrf default
+apply access-list ip 101 control-plane vrf mgmt
+ssh server vrf default
+ #}

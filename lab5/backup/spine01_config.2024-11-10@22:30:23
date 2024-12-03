@@ -1,0 +1,54 @@
+! Command: show running-config
+! device: spine01 (cEOSLab, EOS-4.32.0F-36401836.4320F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$LiEwDVLlqCmiIYOA$8rt264ildAX0Iz31plkA6s6tWTm4BKAURF/uChNNA0DLMHcJJE9opmaRnwTxpyVPxfdbyD0092JzHEM0oTQMD0
+!
+switchport default mode routed
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname spine01
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+interface Ethernet1
+   description inside
+   no switchport
+   ip address 10.10.5.1/30
+!
+interface Ethernet2
+   no switchport
+!
+interface Ethernet3
+   no switchport
+!
+interface Ethernet4
+   no switchport
+!
+interface Ethernet5
+   description outside
+   no switchport
+   ip address 172.16.2.1/30
+!
+interface Loopback0
+   ip address 10.0.0.1/32
+!
+interface Management0
+   description management
+   ip address 172.20.20.4/24
+   ipv6 address 3fff:172:20:20::4/64
+!
+ip routing
+!
+ip route 0.0.0.0/0 Ethernet5 172.16.2.2
+ip route 10.10.0.0/16 172.16.16.1
+!
+end

@@ -1,0 +1,11 @@
+---
+- name: play that configures spine02 using j2 template
+  hosts: spine02
+  become: true
+  vars:
+    j2_template: j2/eos-configure.j2
+
+  tasks:
+    - name: configure {{ inventory_hostname }}
+      eos_config:
+        src: "{{ j2_template }}"

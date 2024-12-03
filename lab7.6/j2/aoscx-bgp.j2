@@ -1,0 +1,12 @@
+router bgp {{ bgp_data[inventory_hostname]['as'] }}
+{% for nei in bgp_data[inventory_hostname]['neighbors'] %}
+neighbor {{ nei['ipv4'] | ansible.utils.ipaddr('address') }} remote-as {{ nei['as'] }} 
+{% endfor %}
+address-family ipv4 unicast
+{% for net in bgp_data[inventory_hostname]['networks'] %}
+network {{ net }}
+{% endfor %}
+redistribute connected
+redistribute ospf
+neighbor 172.16.2.1 activate
+neighbor 172.16.5.1 activate

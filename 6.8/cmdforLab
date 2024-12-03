@@ -1,0 +1,7 @@
+ansible -m eos_config -a "lines='router ospf 1, passive-interface ethernet 5'" -b spine01
+ansible -m eos_config -a "lines='router ospf 1, passive-interface ethernet 5'" -b spine02
+
+
+ansible -m eos_command -a "commands='enable, sh ip ro'" -b spine01
+ansible -m eos_command -a "commands='enable, sh ip ro'" -b spine02
+ansible -m arubanetworks.aoscx.aoscx_command -a "commands='sh ip ro'" -b cs01

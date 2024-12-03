@@ -1,0 +1,13 @@
+---
+- name: gather all facts from a particular eos machines
+  hosts: eos
+  vars:
+    subset: all
+
+  tasks:
+  - name: invoke eos_facts with gather_subset=all
+    eos_facts: 
+      gather_subset: "{{ subset }}"
+
+  - debug:
+      var: ansible_facts

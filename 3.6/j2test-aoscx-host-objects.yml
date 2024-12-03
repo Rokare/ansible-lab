@@ -1,0 +1,16 @@
+---
+- name: build a file containing Aoscx static host object statements
+  hosts: localhost 
+  connection: local
+  vars:
+    srcfile: j2/aoscx-host-objects.j2
+    destfile: out/aoscx-host-object.cmd
+  vars_files:
+  - vars/host-objects.yml
+
+  tasks:
+  
+  - name: dump output from template to a file
+    template:
+      src: "{{ srcfile }}"
+      dest: "{{ destfile }}"

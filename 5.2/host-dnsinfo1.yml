@@ -1,0 +1,17 @@
+---
+- name: display host name, domain name, nameservers for aoscx devices
+  hosts: aoscx
+  collections:
+    - arubanetworks.aoscx
+
+  tasks:
+    - name: run the commands
+      aoscx_command:
+        commands:
+          - sh run | include hostname
+          - sh domain name
+          - sh ip dns
+      register: result
+
+    - debug:
+        var: result.stdout

@@ -1,0 +1,51 @@
+! Command: show running-config
+! device: leaf01 (cEOSLab, EOS-4.32.0F-36401836.4320F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$ufbxiVNQfNp4smEz$.CXu7qCSAZFxOCxM4XBsNB2/qX/2eoKy9dL2xuy7olzVUOUFt4OFYAAJRlG/mat6jpYaBEnxwkbvTft2Q8mYY.
+!
+switchport default mode routed
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf01
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+interface Ethernet1
+   no switchport
+!
+interface Ethernet2
+   no switchport
+!
+interface Ethernet3
+   no switchport
+!
+interface Ethernet4
+   no switchport
+!
+interface Ethernet5
+   no switchport
+   ip address 10.0.10.2/30
+!
+interface Ethernet6
+   no switchport
+   ip address 10.0.1.1/30
+!
+interface Management0
+   ip address 172.20.20.4/24
+   ipv6 address 2001:172:20:20::4/64
+!
+ip routing
+!
+ip route 10.0.4.0/30 10.0.1.2
+ip route 10.0.5.0/30 10.0.10.1
+!
+end

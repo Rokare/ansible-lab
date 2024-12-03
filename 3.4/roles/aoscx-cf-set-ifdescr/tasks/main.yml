@@ -1,0 +1,7 @@
+---
+# tasks file for roles/aoscx-cf-set-ifdescr
+- name: set interface descriptions
+  aoscx_interface:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+  loop: "{{ interfaces }}"

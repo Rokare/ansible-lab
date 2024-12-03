@@ -1,0 +1,597 @@
+hostvars:
+
+  cs01:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_connection: arubanetworks.aoscx.aoscx
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_host: 172.20.20.9
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_network_os: arubanetworks.aoscx.aoscx
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_user: admin
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - aoscx
+    - arubanetworks
+    - cloud_services
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: cs01
+    inventory_hostname_short: cs01
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+leaf01:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_connection: network_cli
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_network_os: eos
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_user: admin
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - eos
+    - leafs
+    - network
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: leaf01
+    inventory_hostname_short: leaf01
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+leaf02:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_connection: network_cli
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_network_os: eos
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_user: admin
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - eos
+    - leafs
+    - network
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: leaf02
+    inventory_hostname_short: leaf02
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+server01:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - servers
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: server01
+    inventory_hostname_short: server01
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+server02:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - servers
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: server02
+    inventory_hostname_short: server02
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+server03:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - servers
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: server03
+    inventory_hostname_short: server03
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+spine01:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_connection: network_cli
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_network_os: eos
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_user: admin
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - eos
+    - network
+    - spines
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: spine01
+    inventory_hostname_short: spine01
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+spine02:
+    ansible_check_mode: false
+    ansible_config_file: /home/user/3.1/ansible.cfg
+    ansible_connection: network_cli
+    ansible_diff_mode: false
+    ansible_facts: {}
+    ansible_forks: 5
+    ansible_inventory_sources:
+    - /home/user/3.1/inventory
+    ansible_network_os: eos
+    ansible_playbook_python: /usr/bin/python3
+    ansible_run_tags:
+    - all
+    ansible_skip_tags: []
+    ansible_user: admin
+    ansible_verbosity: 0
+    ansible_version:
+        full: 2.17.5
+        major: 2
+        minor: 17
+        revision: 5
+        string: 2.17.5
+    group_names:
+    - eos
+    - network
+    - spines
+    groups:
+        all:
+        - server01
+        - server02
+        - server03
+        - cs01
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        aoscx:
+        - cs01
+        arubanetworks:
+        - cs01
+        cloud_services:
+        - cs01
+        eos:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        leafs:
+        - leaf01
+        - leaf02
+        network:
+        - spine01
+        - spine02
+        - leaf01
+        - leaf02
+        servers:
+        - server01
+        - server02
+        - server03
+        spines:
+        - spine01
+        - spine02
+        ungrouped: []
+    inventory_dir: /home/user/3.1
+    inventory_file: /home/user/3.1/inventory
+    inventory_hostname: spine02
+    inventory_hostname_short: spine02
+    omit: __omit_place_holder__51a8eee46a9955dc9a2442b1fec70814fca29320
+    playbook_dir: /home/user/3.1
+
+
+groups:
+
+  all:
+- server01
+- server02
+- server03
+- cs01
+- spine01
+- spine02
+- leaf01
+- leaf02
+aoscx:
+- cs01
+arubanetworks:
+- cs01
+cloud_services:
+- cs01
+eos:
+- spine01
+- spine02
+- leaf01
+- leaf02
+leafs:
+- leaf01
+- leaf02
+network:
+- spine01
+- spine02
+- leaf01
+- leaf02
+servers:
+- server01
+- server02
+- server03
+spines:
+- spine01
+- spine02
+ungrouped: []
+
+
+group_names:
+
+  - aoscx
+- arubanetworks
+- cloud_services
+
+
+inventory_hostnames:
+
+  cs01
+
+
+play_hosts:
+
+  - cs01

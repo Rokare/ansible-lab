@@ -1,0 +1,6 @@
+{% for intf in interface_data[inventory_hostname] %}
+{% if not intf.name.startswith('Loopback') %}
+interface {{ intf.name }}
+ shutdown
+{% endif %}
+{% endfor %}

@@ -1,0 +1,29 @@
+---
+- name: Set spines interfaces description
+  hosts: spines
+  become: true
+
+  tasks:
+    - name: config spines interfaces
+      eos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description }}"
+        state: merged
+      loop: "{{ spine_interfaces }}"  
+
+- name: Set leafs interfaces description
+  hosts: leafs
+  become: true
+
+  tasks:
+    - name: config leafs interfaces
+      eos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description }}"
+      loop: "{{ leaf_interfaces }}"
+
+
+
+

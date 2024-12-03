@@ -1,0 +1,26 @@
+hostname cs01
+!
+username admin privilege 15 secret admin
+!
+ip routing
+!
+interface eth2-4
+   switchport default mode routed
+!
+interface eth2
+   ip address 10.0.5.2/30
+!
+interface eth3
+   ip address 10.0.4.2/30
+!
+interface eth4
+   ip address 10.0.6.1/30
+!
+ip route 10.0.2.0/30 10.0.5.1 1
+!
+ip route 10.0.3.0/30  10.0.4.1 1
+!
+ip route 10.0.10.0/30 10.0.5.1 1
+!
+ip route 10.0.1.0/30 10.0.4.1 1
+!

@@ -1,0 +1,55 @@
+---
+- name: back up config and record devices health indicators 
+  hosts: network
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_become: yes
+    ansible_become_method: enable
+  tasks:
+    - name: back up eos config
+      eos_config:
+        backup: yes
+      when: ansible_network_os == "eos"
+
+    - name: look at eos devices system elements
+      eos_command:
+        commands:
+          - enable
+            #- sh host name
+          - sh ver | include Uptime
+          - sh hostname 
+          - show clock
+          - show version | include Software
+      register: eos_result
+      when: ansible_network_os == "eos"
+
+    - name: look at system elements
+      aoscx_command:
+        commands:
+          - sh ver | include uptime
+          - sh ip domain
+          - sh clock
+          - sh ip name-server
+      register: aoscx_result
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+    - name: show results
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ (eos_result | combine(aoscx_result)) .stdout_lines }}"
+
+- name: back up config aoscx
+  hosts: network
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: arubanetworks.aoscx.aoscx
+    ansible_become: yes
+    ansible_become_method: enable
+  tasks:
+    - name: back up aoscx config
+      aoscx_backup_config:
+        config_name: 'running-config'
+        output_file: './backup/running-config.json'
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+

@@ -1,0 +1,21 @@
+---
+- name: sets nameservers on devices
+  hosts: network
+  become: true
+  collections: 
+    - arubanetworks.aoscx
+
+  tasks:
+  - name: set nameservers on aoscx devices
+    aoscx_command:
+      commands:
+        - configure
+        - ip dns server-address {{ item }}
+    loop: "{{ nameservers }}"
+    when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+  - name: set nameservers on eos devices
+    eos_system:
+      name_servers: "{{ nameservers }}"
+    when: ansible_network_os == "eos"
+

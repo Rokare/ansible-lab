@@ -1,0 +1,23 @@
+---
+- name: >
+   illustrate the use of the
+   --extra-vars (-e) option by
+   using aoscx_command module
+   and running the traceroute command
+   when destination is {{ dest }}
+
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: network_cli
+  tasks:
+
+    - name : traceroute to dest
+      aoscx_command: 
+        commands: [" traceroute {{ dest }} probe 2 timeout 2"]
+      register: result
+
+    - name: show results
+      debug:
+        var: result.stdout_lines

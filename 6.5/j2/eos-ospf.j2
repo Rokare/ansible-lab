@@ -1,0 +1,12 @@
+router ospf 1
+{% for intf in layer3_data[inventory_hostname] %}
+{% if intf.name == 'Loopback0' %}
+router-id {{ intf.ipv4 | ansible.utils.ipaddr('address') }}
+log-adjacency-changes
+{% if inventory_hostname == 'spine01' or inventory_hostname == 'spine02' %}
+default-information originate always metric 10 metric-type 2
+{% endif %}
+{% else %}
+network {{ intf.ipv4 | ansible.utils.ipaddr('network/prefix') }}  area 0
+{% endif %}
+{% endfor %}

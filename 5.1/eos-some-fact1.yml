@@ -1,0 +1,18 @@
+---
+- name: gather all facts from a particular eos machines
+  hosts: eos
+  vars:
+    subset: default
+
+  tasks:
+  - name: invoke eos_facts with gather_subset=all
+    eos_facts: 
+      gather_subset: "{{ subset }}"
+    when: ansible_network_os == "eos"
+
+  - debug:
+      msg:
+        - "Host name: {{ ansible_net_hostname }}"
+        - "Model: {{ ansible_net_model }}"  
+        - "Version: {{ ansible_net_version }}"  
+        - "SerialNum: {{ ansible_net_serialnum }}"  

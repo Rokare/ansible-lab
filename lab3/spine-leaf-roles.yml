@@ -1,0 +1,19 @@
+---
+- name: Set spines interfaces description
+  hosts: eos
+  become: true
+
+  tasks:
+    - name: config spines interfaces
+      include_role:
+        name: eos-spine
+      when: inventory_hostname in groups['spines']
+
+    - name: config leafs interfaces
+      include_role:
+        name: eos-leaf
+      when: inventory_hostname in groups['leafs']
+
+
+
+

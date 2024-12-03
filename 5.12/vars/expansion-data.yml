@@ -1,0 +1,63 @@
+layer3_data:
+  cs01:
+    - name: loopback1
+      ipv4: 172.16.0.1/32
+  
+    - name: 1/1/2
+      ipv4: 172.16.2.2/30
+      description: outside
+
+    - name: 1/1/4
+      ipv4: 172.16.10.1/30
+      description: inside
+
+  spine01:
+    - name: Loopback0
+      ipv4: 10.0.0.1/32
+
+    - name: eth1
+      ipv4: 10.10.5.1/30
+      description: inside
+
+    - name: eth5
+      ipv4: 172.16.2.1/30
+      description: outside
+
+  leaf01:
+
+    - name: Loopback0
+      ipv4: 10.0.0.11/32
+
+    - name: eth1
+      ipv4: 10.10.10.1/30
+      description: server01
+
+    - name: eth5
+      ipv4: 10.10.5.2/30
+      description: uplink
+
+
+intr_descr:
+  cs01:
+    - name: 1/1/1
+      description: management
+    - name: 1/1/2
+      description: outside
+    - name: 1/1/4
+      description: inside
+
+  spine01:
+    - name: management0
+      description: management
+    - name: eth1
+      description: inside
+    - name: eth5
+      description: outside  
+
+  leaf01:
+    - name: management0
+      description: management
+    - name: eth1
+      description: server01
+    - name: eth5
+      description: uplink       

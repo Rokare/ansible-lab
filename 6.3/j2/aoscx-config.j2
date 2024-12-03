@@ -1,0 +1,12 @@
+hostname {{ inventory_hostname }}
+domain-name {{ domain_name }}
+vrf green
+{% for nameserver in nameservers %}
+ip dns server-address {{ nameserver }} 
+{% endfor %}
+logging {{ syslog_ipv4 }} tcp 514 severity {{ aoscx_loglevel }} vrf mgmt 
+snmp-server vrf mgmt
+snmp-server community {{ ro_community }}
+{% for snmp_client in snmp_clients %}
+snmp-server host {{ snmp_client }}
+{% endfor %}

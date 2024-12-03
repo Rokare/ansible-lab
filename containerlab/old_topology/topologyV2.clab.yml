@@ -1,0 +1,51 @@
+name: ansiblelab
+prefix: ""
+topology:
+    nodes:
+        cs01:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-config/cs01.cfg
+        server01:
+            kind: linux
+            image: alpine:latest
+        server02:
+            kind: linux
+            image: alpine:latest
+        server03:
+            kind: linux
+            image: alpine:latest
+        spine01:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-config/spine01.cfg
+        spine02:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-config/spine02.cfg
+        leaf01:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-config/leaf01.cfg
+        leaf02:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-config/leaf02.cfg
+        
+    links:
+        - endpoints: ["cs01:eth4", "server03:eth1"]
+        - endpoints: ["cs01:eth5", "server03:eth2"]
+        - endpoints: ["cs01:eth2", "spine01:eth5"]
+        - endpoints: ["cs01:eth3", "spine02:eth5"]
+        - endpoints: ["spine01:eth3", "spine02:eth3"]
+        - endpoints: ["spine01:eth4", "spine02:eth4"]
+        - endpoints: ["spine01:eth1", "leaf01:eth5"]
+        - endpoints: ["spine02:eth2", "leaf02:eth6"]
+        - endpoints: ["spine01:eth2", "leaf02:eth5"]
+        - endpoints: ["spine02:eth1", "leaf01:eth6"]
+        - endpoints: ["leaf01:eth3", "leaf02:eth3"]
+        - endpoints: ["leaf01:eth4", "leaf02:eth4"]
+        - endpoints: ["leaf01:eth1", "server01:eth1"]
+        - endpoints: ["leaf01:eth2", "server02:eth1"]
+        - endpoints: ["leaf02:eth2", "server02:eth2"]
+        - endpoints: ["leaf02:eth1", "server01:eth2"]

@@ -1,0 +1,31 @@
+---
+- name: demonstrate authentification to network by showing hostname
+  hosts: network
+  collections:
+    - arubanetworks.aoscx
+
+  tasks:
+    - name: hostname on Aoscx machine
+      aoscx_command:
+        commands:
+          - show run | include hostname
+      register: result
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - debug: 
+       var: result.stdout
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: hostname on EOS machine
+      eos_command:
+        commands:
+         - enable
+         - show hostname
+      register: result
+      when: ansible_network_os == "eos"
+
+    - debug:
+       var: result.stdout
+      when: ansible_network_os == "eos"
+
+

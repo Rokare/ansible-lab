@@ -1,0 +1,10 @@
+---
+# tasks file for roles/aoscx-cf-show-ifdescr
+- name: get interfaces descriptions
+  aoscx_command:
+    commands: ['show interface | include Description']
+  register: results
+
+- name: show results
+  debug:
+    var: results.stdout

@@ -1,0 +1,14 @@
+---
+- name: A reachability test
+  hosts: cs01
+  vars_files: 
+  - vars/myvars.yml
+  collections:
+  - arubanetworks.aoscx
+
+  tasks:
+  - name: "test reachability from target to 192.168.5"
+    aoscx_command:
+      commands: ['ping {{ item }}']
+    loop: "{{ ipv4_adresses | select ('match', '^192\\.168\\.5\\..*') | list }}"
+    when: ansible_network_os == "arubanetworks.aoscx.aoscx"

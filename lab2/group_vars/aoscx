@@ -1,0 +1,7 @@
+ansible_host: 172.20.20.6
+ansible_network_os: arubanetworks.aoscx.aoscx
+ansible_user: admin 
+ansible_password: admin
+ansible_aoscx_validate_certs: False
+ansible_aoscx_use_proxy: False
+ansible_acx_no_proxy: False 

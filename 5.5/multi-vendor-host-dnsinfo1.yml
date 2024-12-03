@@ -1,0 +1,33 @@
+---
+- name: multi-vendor play to display host name, domain name, nameservers
+  hosts: network
+  collections:
+    - arubanetworks.aoscx
+  tasks:
+    - name: aoscx host, domain, nameserver
+      aoscx_command:
+        commands:
+          - configure
+          - sh run | include hostname
+          - sh domain-name
+          - sh ip dns
+      register: result
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - debug: 
+        var: result.stdout
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: eos host, domain, nameserver
+      eos_command:
+        commands:
+          - enable
+          - show hostname 
+          - show dns domain
+          - show ip name-server
+      register: result
+      when: ansible_network_os == "eos"
+
+    - debug:
+       var: result.stdout
+      when: ansible_network_os == "eos"

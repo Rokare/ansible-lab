@@ -1,0 +1,35 @@
+---
+- name: Set hostname, nameservers and domain name for Aoscx and Eos devices 
+  hosts: network
+  collections:
+    - arubanetworks.aoscx
+  become: True
+  vars:
+    template_aoscx_file: j2/aoscx-hn-dn-ns.j2
+    template_eos_file: j2/eos-hn-dn-ns.j2
+    cfg_file: config/aoscx-hn-dn-ns.cfg
+
+  tasks:
+
+    - name: create config if not exists already
+      file:
+        path: config/
+        state: directory
+
+    - name: template cfg file
+      template:
+        src: "{{ template_aoscx_file }}"
+        dest: "{{ cfg_file }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: configure Eos
+      eos_config:
+        src: "{{ template_eos_file }}"
+      when: ansible_network_os == "eos"
+
+    - name: configure Aoscx
+      aoscx_config:
+        src: "{{ cfg_file }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+

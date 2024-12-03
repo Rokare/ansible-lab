@@ -1,0 +1,5 @@
+ansible_connection: network_cli
+domain_name: lab.example.com
+name_servers:
+  - 8.8.8.8
+  - 8.8.8.4

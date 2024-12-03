@@ -1,0 +1,73 @@
+---
+- name: define the startup exemple.com layer3 network
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+
+  vars:
+    mgmt_intf: 1/1/1
+    server_ipv4: 172.16.10.2/30
+    ansible_connection: arubanetworks.aoscx.aoscx
+  vars_files:
+    - vars/startup-data.yml
+
+  tasks:
+
+    - name: remove old layer3 interface data
+      aoscx_l3_interface:
+        interface: "{{ item.name }}"
+        state: delete
+      loop: "{{ layer3_data[inventory_hostname] }}"
+
+    - name: configure layer3 interfaces
+      aoscx_l3_interface:
+        interface: "{{ item.name }}"
+        ipv4: "{{ item.ipv4 }}"
+        vrf: default
+      loop: "{{ layer3_data[inventory_hostname] }}"
+
+    - name: configure description of management interface
+      # do management interface separately, dont shut down
+      aoscx_interface:
+        name: "{{ mgmt_intf }}"
+        description: "{{ interface_data[inventory_hostname][mgmt_intf].description }}"
+
+    - name: configure interface description
+      aoscx_interface:
+        name: "{{ item.key }}"
+        description: "{{ item.value.description }}"
+        enabled: false
+      when: not item.key == mgmt_intf
+      with_dict: "{{ interface_data[inventory_hostname] }}"
+
+    - name: bring interface up
+      aoscx_interface:
+        name: "{{ item.key }}"
+        enabled: True
+      when: not item.key == mgmt_intf
+      with_dict: "{{ interface_data[inventory_hostname] }}"
+
+    - name: pause
+      pause:
+        seconds: 1
+
+- name: Run ping command for aoscx
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+
+  vars:
+    mgmt_intf: GigabitEthernet1
+    server_ipv4: 172.16.10.2/30
+
+  tasks:
+    - name: test connectivity to server
+      aoscx_command:
+        commands:
+          # - configure
+          - ping {{ server_ipv4|ipaddr('address') }}
+      register: result
+
+    - name: show result
+      debug:
+        var: result

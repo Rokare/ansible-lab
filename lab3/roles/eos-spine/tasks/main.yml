@@ -1,0 +1,8 @@
+---
+# tasks file for roles/eos-spine
+- name: config spines interfaces
+  eos_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        description: "{{ item.description }}"
+  loop: "{{ spine_interfaces }}"

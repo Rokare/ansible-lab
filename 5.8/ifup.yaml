@@ -1,0 +1,25 @@
+---
+- name: bring up an interface
+  hosts: "{{ target }}"
+  become: true
+  tasks:
+    - name: enable interface {{ intf }} on Eos box
+      eos_interfaces:
+        config:
+          - name: "{{ intf }}"
+            enabled: True
+      when: ansible_network_os == "eos"
+
+- name: play to bring up an interface (aoscx)
+  hosts: "{{ target }}"
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: arubanetworks.aoscx.aoscx
+  
+  tasks:
+    - name: enable interface {{ intf }} on Aoscx box
+      aoscx_interface:
+        name: "{{ intf }}"
+        enabled: True
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"

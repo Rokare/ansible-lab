@@ -1,0 +1,11 @@
+---
+- name: write variables to a file using a template
+  hosts: cs01
+
+  tasks:
+
+  - name: do it
+    template:
+      src: j2/magic.yaml
+      dest: magic.out
+

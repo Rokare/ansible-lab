@@ -1,0 +1,23 @@
+interface 1/1/2
+    no shutdown
+    description outside
+    no routing
+    vlan access 1
+
+router ospf 1
+    enable
+{% for intf in layer3_data[inventory_hostname] %}
+{% if intf.name.startswith('loopback') %}
+    router-id {{ intf.ipv4 | ansible.utils.ipaddr('address') }}
+    area 0
+{% else %}
+    area 0 range {{ intf.ipv4 | ansible.utils.ipaddr('network/prefix') }} type inter-area
+{% endif %}
+{% endfor %}
+    redistribute connected
+
+interface vlan 1
+    ip address 172.16.2.2/30
+    ip ospf network broadcast
+    ip ospf priority 1
+    ip ospf 1 area 0.0.0.0

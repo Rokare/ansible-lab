@@ -1,0 +1,5 @@
+interfaces:
+- { name: 1/1/1, description: Management }
+- { name: 1/1/2, description: Outside Primary }
+- { name: 1/1/3, description: Outside Secondary }
+- { name: 1/1/4, description: Server Link1 }

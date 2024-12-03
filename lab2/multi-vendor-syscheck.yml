@@ -1,0 +1,64 @@
+---
+- name: back up config and inspect health on Eos devices
+  hosts: eos
+  vars:
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_password: "{{ eos_pass }}"
+
+  tasks:
+    - name: back up config
+      eos_config:
+        backup: yes
+    - name: look at system elements
+      eos_command:
+        commands:
+          - enable
+            #- sh host name
+          - sh ver | include Uptime
+          - sh hostname 
+          - show clock
+          - show version | include Software
+      register: results
+
+    - name: show results
+      debug:
+         var: results.stdout
+
+- name: back up from an Aoscx device
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars: 
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_connection: arubanetworks.aoscx.aoscx
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_password: "{{ aoscx_pass }}"
+  gather_facts: False
+  tasks:
+    - name: back up config
+      aoscx_backup_config:
+        config_name: 'running-config'
+        output_file: './backup/running-config.json'
+
+- name: inspect healt on Aoscx device
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: network_cli
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: look at system elements
+      aoscx_command:
+        commands:
+          - sh ver | include uptime
+          - sh ip domain
+          - sh clock
+          - sh ip name-server
+      register: results
+
+    - name: show results
+      debug:
+        var: results.stdout

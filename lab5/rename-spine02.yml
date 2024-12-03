@@ -1,0 +1,12 @@
+---
+- name: rename hostname spine02
+  hosts: spine02
+  become: true
+  vars:
+    config_file: config/spine02.cfg
+
+  tasks:
+    - name: load config file to change hostname
+      eos_config:
+        src: "{{ config_file }}"
+

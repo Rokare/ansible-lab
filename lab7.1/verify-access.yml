@@ -1,0 +1,16 @@
+---
+- name : verify access to members of host group 'network'
+  hosts: network
+
+  tasks:
+  - name: "verify access to device"
+    ping:
+    register: ping_response
+
+  - name: debug
+    debug:
+      msg: "{{ ping_response }}"
+
+  - name: assert that the response contains string 'pong'
+    assert:
+      that: ping_response.ping == "pong"

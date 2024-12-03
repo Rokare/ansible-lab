@@ -1,0 +1,18 @@
+---
+- name: set interface description for cloud-services devices
+  hosts: cloud_services
+  # interface description data for this group
+  # is set in its group variables file
+  collections:
+    - arubanetworks.aoscx  
+  vars:
+    ansible_connection: arubanetworks.aoscx.aoscx
+  roles:
+    - aoscx-cf-set-ifdescr
+
+- name: show results interfaces
+  hosts: cloud_services
+  collections:
+    - arubanetworks.aoscx
+  roles:
+    - aoscx-cf-show-ifdescr

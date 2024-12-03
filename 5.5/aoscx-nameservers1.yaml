@@ -1,0 +1,17 @@
+---
+- name: sets nameservers on Ios device
+  hosts: aoscx
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    nameservers:
+      - 8.8.8.8
+      - 8.8.8.4
+
+  tasks:
+    - name: set namerservers
+      aoscx_command:
+        commands:
+          - configure
+          - ip dns server-address {{ item }}
+      loop: "{{ nameservers }}"

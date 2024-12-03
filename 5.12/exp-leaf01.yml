@@ -1,0 +1,42 @@
+---
+- name: >
+   a play that configure leaf01
+   this is the expansion model
+  hosts: leaf01
+  become: true
+  vars:
+    route:
+        dest: 0.0.0.0/0
+        interface: eth5
+        next_hop: 10.10.5.1
+  vars_files:
+    - vars/expansion-data.yml
+
+  tasks:
+    - name: label interface
+      eos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description }}"
+      loop: "{{ intr_descr[inventory_hostname] }}"
+
+    - name: configure layer 3
+      eos_l3_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            ipv4:
+              - address: "{{ item.ipv4 }}"
+      loop: "{{ layer3_data[inventory_hostname] }}"
+
+    - name: add static route
+      eos_static_routes:
+        config:
+          - address_families:
+              - afi: ipv4
+                routes:
+                  - dest: "{{ route.dest }}"
+                    next_hops:
+                      - forward_router_address: "{{ route.next_hop }}"
+                        interface: "{{ route.interface }}"
+
+

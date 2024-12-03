@@ -1,0 +1,30 @@
+---
+- name: set interface description for cloud-services devices
+  hosts: cloud_services
+  # interface description data for this group
+  # is set in its group variables file
+  collections:
+    - arubanetworks.aoscx  
+  vars:
+    ansible_connection: arubanetworks.aoscx.aoscx
+  tasks:
+  - name: set interface descriptions
+    aoscx_interface:
+      name: "{{ item.name }}"
+      description: "{{ item.description }}"
+    loop: "{{ interfaces }}"
+
+- name: show results interfaces
+  hosts: cloud_services
+  collections:
+    - arubanetworks.aoscx
+
+  tasks:
+  - name: get interfaces descriptions
+    aoscx_command:
+      commands: ['show interface | include Description']
+    register: results
+
+  - name: show results
+    debug:
+      var: results.stdout

@@ -1,0 +1,10 @@
+---
+
+- name: expansion playbook for cs01
+  import_playbook: exp-cs01.yml
+
+- name: expansion playbook for spine01
+  import_playbook: exp-spine01.yml
+
+- name: expansion playbook for leaf01
+  import_playbook: exp-leaf01.yml

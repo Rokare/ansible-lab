@@ -1,0 +1,11 @@
+layer3_data:
+  cs01:
+    - { name: loopback1, ipv4: 172.16.0.1/32 }
+    - { name: 1/1/4, ipv4: 172.16.10.1/30 }
+
+interface_data:
+  cs01:
+    1/1/1:
+      description: outside
+    1/1/4:
+      description: inside

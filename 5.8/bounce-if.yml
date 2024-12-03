@@ -1,0 +1,49 @@
+---
+- name: bounce an interface (shut/ no shut) on EOS 
+  
+  hosts: "{{ target }}"
+  become: true
+  tasks:
+    - name: shut interface {{ intf }} on Eos box
+      eos_interfaces:
+        config:
+          - name: "{{ intf }}"
+            enabled: False
+      when: target in groups['eos']
+
+    - name: pause briefly before enabling interface 
+      pause:
+        seconds: 1
+
+    - name: enable interface {{ intf }} on Eos box
+      eos_interfaces:
+        config:
+          - name: "{{ intf }}"
+            enabled: True
+      when: target in groups['eos']
+
+- name: bounce an interface (shut/ no shut) on AOSCX
+  hosts: "{{ target }}"
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: arubanetworks.aoscx.aoscx
+  
+  tasks:
+    - name: shut interface {{ intf }} on Aoscx box
+      aoscx_interface:
+        name: "{{ intf }}"
+        enabled: False
+      when: target in groups['aoscx']
+
+    - name: pause briefly before enabling interface
+      pause:
+        seconds: 1
+
+    - name: enable interface {{ intf }} on Aoscx box
+      aoscx_interface:
+        name: "{{ intf }}"
+        enabled: True
+      when: target in groups['aoscx']
+
+

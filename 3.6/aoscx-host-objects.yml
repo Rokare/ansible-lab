@@ -1,0 +1,22 @@
+---
+- name: build a file containing Aoscx static host object statements
+  hosts: aoscx
+  collections:
+  - arubanetworks.aoscx
+  vars:
+    srcfile: j2/aoscx-host-objects.j2
+    destfile: out/aoscx-host-object.cmd
+  vars_files:
+  - vars/host-objects.yml
+
+  tasks:
+    - name: dump output from template to a file
+      template:
+        src: "{{ srcfile }}"
+        dest: "{{ destfile }}"
+      register: result
+
+    - name: configure directly from template
+      aoscx_config:
+        src: "{{ destfile }}"
+      when: (result is success) and (ansible_network_os == "arubanetworks.aoscx.aoscx")

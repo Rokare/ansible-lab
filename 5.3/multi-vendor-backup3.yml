@@ -1,0 +1,16 @@
+---
+- name: back up network device configuration
+  hosts: network
+  become: true
+  collections:
+    - arubanetworks.aoscx
+
+  tasks:
+    - name: backup config of eos decive
+      eos_config:
+        backup: yes
+      when: ansible_network_os == "eos"
+    - name: backup config of eos decive
+      aoscx_config:
+        backup: yes
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"

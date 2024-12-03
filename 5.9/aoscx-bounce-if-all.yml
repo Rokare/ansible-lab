@@ -1,0 +1,44 @@
+---
+- name: bounce all interfaces on aoscx devices
+  hosts: aoscx
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    shut_template: j2/aoscx-if-shut-all.j2
+    no_shut_template: j2/aoscx-if-noshut-all.j2
+
+    shut_config: config/aoscx-if-shut-all.cfg
+    no_shut_config: config/aoscx-if-noshut-all.cfg
+  vars_files:
+      - vars/layer3-branch-corp-cloud.yml
+
+  tasks:
+
+    - name: generate conf shut from template
+      template: 
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - { src:  "{{shut_template}}" , dest:  "{{shut_config}}" }
+        - { src: "{{no_shut_template}}", dest: "{{no_shut_config}}" }        
+    
+    - name: shut/no shut on all aoscx interfaces
+      aoscx_config:
+        src: "{{ shut_config }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: pause before enabling interfaces
+      pause:
+        seconds: 1
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: shut/no shut on all aoscx interfaces
+      aoscx_config:
+        src: "{{ no_shut_config }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: cleanup config files generate
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items: "{{  [shut_config, no_shut_config] }}"

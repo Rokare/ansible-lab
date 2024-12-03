@@ -1,0 +1,17 @@
+---
+- name: back up from an Aoscx device
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    #    ansible_python_interpreter: /usr/bin/python3
+    ansible_connection: network_cli
+  gather_facts: False
+  tasks:
+    - name: ping management
+      aoscx_command:
+        commands: ['ping 172.20.20.1']
+      register: ping_response
+
+    - debug:
+        var: ping_response

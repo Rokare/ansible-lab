@@ -1,0 +1,53 @@
+---
+- name: sets host name, domain name, nameservers
+  hosts: network
+  become: true
+  collections:
+    - arubanetworks.aoscx
+
+  tasks:
+  # --- host name ---
+  - name: set host name on eos device
+    eos_system:
+      hostname: "{{ inventory_hostname}}"
+    when: ansible_network_os == "eos"
+
+  - name: set host name on aoscx device
+    aoscx_command:
+      commands:
+        - configure
+        - hostname "{{ inventory_hostname }}"
+        - vrf green
+    when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+  # --- domain name ---
+  - name: set domain name on eos device
+    eos_system:
+      domain_name: "{{ domain_name }}"
+    when: ansible_network_os == "eos"
+
+  # --- nameserver ---
+  - name: set nameservers on eos device
+    eos_system:
+      name_servers: "{{ nameservers }}"
+    when: ansible_network_os == "eos"
+
+- name: sets domain name, nameservers
+  hosts: network
+  collections:
+     - arubanetworks.aoscx
+  vars:
+     - ansible_connection: arubanetworks.aoscx.aoscx
+
+  tasks:
+  - name: set nameservers on aoscx device
+    aoscx_dns:
+      domain_name: "{{ domain_name }}"
+      vrf: "green"
+    when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+  - name: set nameservers on aoscx device
+    aoscx_dns:
+      name_servers: "{{ [[0, nameservers[0]], [1,nameservers[1]]] | community.general.dict }}"
+      vrf: "green"
+    when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+

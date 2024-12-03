@@ -1,0 +1,49 @@
+---
+- name: verify connectivity end-to-end
+  hosts: access_layer
+  become: True
+  collections:
+    - arubanetworks.aoscx
+  vars_files:
+    - vars/ping-srcdst.yml
+
+  tasks:
+   
+
+
+    - name: run ping commands on Eos access layer device
+    # this runs a ping command across the link
+      eos_command:
+        commands:
+          - enable
+          - ping {{ item.dst }} source {{ item.src }} repeat {{ pingcount }}
+      register: ping_result
+      loop: "{{ ping_data[inventory_hostname] }}"
+      when: ansible_network_os == "eos"
+
+    - name: looped assertion of ping results from Eos access layer device
+      assert:
+        that: "', 0% packet loss' in item.stdout[1]"
+      loop: "{{ ping_result.results }}"
+      when: ansible_network_os == "eos" 
+
+    - name: prime Aoscx arp cache
+      aoscx_command:
+        commands:
+          - ping {{ item.dst }} source {{ item.src }} repetitions 1
+      loop: "{{ ping_data[inventory_hostname] }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: "run ping commands on Aoscx access layer device {{ inventory_hostname }}"
+      aoscx_command:
+        commands:
+          - ping {{ item.dst }} source {{ item.src }} repetitions {{ pingcount }}
+      loop: "{{ ping_data[inventory_hostname] }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+      register: ping_result
+
+    - name: looped assertion of ping results from Aoscx access layer device
+      assert:
+        that: "'0% packet loss' in item.stdout[0]"
+      loop: "{{ ping_result.results }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"

@@ -1,0 +1,29 @@
+---
+- name: back up config from a Eos devices
+  hosts: spine01
+  vars:
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_password: "{{ eos_pass }}"
+
+  tasks:
+    - name: back up config
+      eos_config:
+        backup: yes
+
+
+- name: back up from an Aoscx device
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars: 
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_password: "{{ aoscx_pass }}"
+  gather_facts: False
+  tasks:
+    - name: back up config
+      aoscx_backup_config:
+        config_name: 'running-config'
+        output_file: '/home/user/2.4/backup/running-config.json'

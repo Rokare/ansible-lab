@@ -1,0 +1,16 @@
+---
+- name: Show the running config of a Eos system
+  hosts: spine01
+
+  tasks:
+  - name: execute the command
+    eos_command:
+      commands:
+        - enable
+        - show running-config interfaces Ethernet 2-5 
+    register: result
+
+  - name: show result
+    debug:
+      var: result
+

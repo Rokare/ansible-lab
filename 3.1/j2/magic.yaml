@@ -1,0 +1,19 @@
+hostvars:
+
+  {{ hostvars | to_nice_yaml }}
+
+groups:
+
+  {{ groups | to_nice_yaml }}
+
+group_names:
+
+  {{ group_names | to_nice_yaml }}
+
+inventory_hostnames:
+
+  {{ inventory_hostname | to_nice_yaml }}
+
+play_hosts:
+
+  {{ play_hosts | to_nice_yaml }}

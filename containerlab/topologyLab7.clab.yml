@@ -1,0 +1,60 @@
+name: ansiblelab
+prefix: ""
+
+topology:
+    nodes:
+        cs01:
+            kind: aruba_aoscx
+            image: vrnetlab/vr-aoscx:10.07.0010 
+            startup-config: ./startup-configV2/cs01.cfg
+        server01:
+            kind: linux
+            image: alpine:latest
+            binds: 
+              - ./startup-config/server01.sh:/tmp/server01.sh
+            exec:
+              - chmod +x /tmp/server01.sh
+              - /tmp/server01.sh  
+        server02:
+            kind: linux
+            image: alpine:latest
+            binds:
+              - ./startup-config/server02.sh:/tmp/server02.sh
+            exec:
+              - chmod +x /tmp/server02.sh
+              - /tmp/server02.sh
+        server03:
+            kind: linux
+            image: alpine:latest
+            binds:
+              - ./startup-config/server03.sh:/tmp/server03.sh
+            exec:
+              - chmod +x /tmp/server03.sh
+              - /tmp/server03.sh
+        spine01:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-configV2/spine01.cfg
+        spine02:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-configV2/spine02.cfg
+        leaf01:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-configV2/leaf01.cfg
+        leaf02:
+            kind: ceos
+            image: ceos:4.32.0F
+            startup-config: ./startup-configV2/leaf02.cfg
+        
+    links:
+        - endpoints: ["cs01:eth4", "server03:eth1"]
+        - endpoints: ["cs01:eth2", "spine01:eth5"]
+        - endpoints: ["cs01:eth3", "spine02:eth5"]
+        - endpoints: ["spine01:eth3", "spine02:eth3"]
+        - endpoints: ["spine01:eth1", "leaf01:eth5"]
+        - endpoints: ["spine02:eth2", "leaf02:eth6"]
+        - endpoints: ["leaf01:eth1", "server01:eth1"]
+        - endpoints: ["leaf02:eth2", "server02:eth2"]
+

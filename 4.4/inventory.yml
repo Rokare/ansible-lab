@@ -1,0 +1,29 @@
+servers:
+  hosts:
+    server[01:03]
+
+spines:
+  hosts:
+    spine[01:02]
+
+leafs:
+  hosts:
+    leaf[01:02]
+
+cloud_services:
+  hosts:
+    cs01
+
+aoscx:
+  children:
+    cloud_services:
+
+eos:
+  children:
+    spines:
+    leafs:
+
+network:
+  children:
+    aoscx:
+    eos:

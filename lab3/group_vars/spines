@@ -1,0 +1,7 @@
+spine_interfaces:
+- { name: Management0 , description: mgmt }
+- { name: eth1, description: leaf01 }
+- { name: eth2, description: leaf02 }
+- { name: eth3, description: peer-link1 }
+- { name: eth4, description: peer-link2 }
+- { name: eth5, description: cloud-services }

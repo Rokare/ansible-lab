@@ -1,0 +1,18 @@
+---
+- name: change hostname for cs01
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    hostname_template_file: j2/aoscx-cs-hostname.j2
+    hostname_config_file: config/aoscx-cs-hostname.cfg
+
+  tasks:
+    - name: templating cfg file
+      template:
+        src: "{{ hostname_template_file }}"
+        dest: "{{ hostname_config_file }}"
+   
+    - name: change hostname
+      aoscx_config:
+        src: "{{ hostname_config_file }}"

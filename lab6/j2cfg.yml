@@ -1,0 +1,39 @@
+---
+- name: configure devices using j2 templates
+  hosts: network
+  become: true
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    eos_template: j2/eos-config.j2
+    aoscx_template: j2/aoscx-config.j2
+    aoscx_config: config/aoscx-config.cfg
+
+  tasks:
+
+    - name: create config folder
+      file:
+        path: config/
+        state: directory
+        mode: '0755'
+
+    - name: configure {{ inventory_hostname }}
+      eos_config:
+        src: "{{ eos_template }}"
+      when: ansible_network_os == "eos"
+
+    - template:
+        src: "{{ aoscx_template }}"
+        dest: "{{ aoscx_config }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+    
+    - name: configure {{ inventory_hostname }}
+      aoscx_config:
+        src: "{{ aoscx_config }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: delete tmp for aoscx
+      file:
+        path: "{{ aoscx_config }}"
+        state: absent
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"

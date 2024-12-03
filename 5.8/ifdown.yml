@@ -1,0 +1,25 @@
+---
+- name: play to shutdown an interface
+  hosts: "{{ target }}"
+
+  tasks:
+    - name: disable interface {{ intf }} on Eos box
+      eos_interfaces:
+        config:
+          - name: "{{ intf }}"
+            enabled: False
+      when: ansible_network_os == "eos"
+
+- name: play to shut an interface (aoscx)
+  hosts: "{{ target }}"
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: arubanetworks.aoscx.aoscx
+  
+  tasks:
+    - name: disable interface {{ intf }} on Aoscx box
+      aoscx_interface:
+        name: "{{ intf }}"
+        enabled: false
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"

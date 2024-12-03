@@ -1,0 +1,40 @@
+---
+- name: configure eBGP on Eos and Aoscx routers
+  hosts: border_routers
+  become: yes
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    eos_bgp_tpl: ../j2/eos-bgp.j2
+    aoscx_bgp_tpl: ../j2/aoscx-bgp.j2
+    aoscx_bgp_cfg: config/aoscx-bgp.cfg
+  vars_files:
+    - ../vars/ebgp-breakup-data.yml
+
+  tasks:
+
+    - name: static routes on cs01 to support non-local bgp routes
+      aoscx_config:
+        lines:
+          - ip route 10.10.0.0/24 1/1/2 172.16.2.1
+          - ip route 192.168.0.0/24 1/1/3 172.16.5.1
+      when: inventory_hostname == 'cs01'
+
+    - name: template config file for aoscx router
+      template: 
+        src: "{{ aoscx_bgp_tpl }}"
+        dest: "{{ aoscx_bgp_cfg }}"
+      when: inventory_hostname == 'cs01'
+
+
+    - name: "map bgp data to Aoscx device using {{ aoscx_bgp_tpl }} "
+      aoscx_config: 
+        src: "{{ aoscx_bgp_cfg }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"  
+
+    
+    - name: "map bgp data to Eos device using {{ eos_bgp_tpl }} "
+      eos_config: 
+        src: "{{ eos_bgp_tpl }}"
+      when: ansible_network_os == "eos"  
+

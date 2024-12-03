@@ -1,0 +1,87 @@
+---
+- name: configure eBGP on Eos and Aoscx routers
+  hosts: border_routers
+  become: yes
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    eos_bgp_tpl: j2/eos-bgp.j2
+    aoscx_bgp_tpl: j2/aoscx-bgp.j2
+    aoscx_bgp_cfg: config/aoscx-bgp.cfg
+  vars_files:
+    - vars/ebgp-adjustment-data.yml
+
+  tasks:       
+    - name: do not use OSPF to advertise across AS boundaries on spines
+      arista.eos.eos_ospf_interfaces:
+        config:
+          - name: "{{ item }}"
+            address_family:
+              - afi: "ipv4"
+                passive_interface: true
+      loop: [ eth3, eth5 ]
+      when: inventory_hostname in groups['spines']
+
+
+    - name: do not use OSPF to advertise across AS boundaries on cs01
+      aoscx_command:
+        commands:
+          - configure
+          - router ospf 1
+          - passive-interface default
+      when: inventory_hostname == 'cs01'
+
+    - name: static routes on cs01 to support non-local bgp routes
+      aoscx_config:
+        lines:
+          - ip route 10.10.0.0/24 1/1/2 172.16.2.1
+          - ip route 192.168.0.0/24 1/1/3 172.16.5.1
+      when: inventory_hostname == 'cs01'
+
+    - name: create config if not exists already
+      file:
+        path: config/
+        state: directory
+
+    - name: template config file for aoscx router
+      template: 
+        src: "{{ aoscx_bgp_tpl }}"
+        dest: "{{ aoscx_bgp_cfg }}"
+      when: inventory_hostname == 'cs01'
+
+
+    - name: "map bgp data to Aoscx device using {{ aoscx_bgp_tpl }} "
+      aoscx_config: 
+        src: "{{ aoscx_bgp_cfg }}"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"  
+
+    
+    - name: Delete router bgp before re-config
+      eos_command: 
+        commands:
+          - enable
+          - configure
+          - no router bgp  "{{ bgp_data[inventory_hostname]['as'] }}"
+      when: ansible_network_os == "eos"
+
+    - name: "map bgp data to Eos device using {{ eos_bgp_tpl }} "
+      eos_config: 
+        src: "{{ eos_bgp_tpl }}"
+      when: ansible_network_os == "eos"  
+
+
+# - name: configure eBGP on Eos and Aoscx routers
+#   hosts: border_routers
+#   become: true
+#   collections:
+#     - arubanetworks.aoscx
+#   vars: 
+#     ansible_connection : arubanetworks.aoscx.aoscx
+#   tasks:
+#     - name: do not use OSPF to advertise across AS boundaries on cs01
+#       aoscx_ospf_router:
+#         state: update
+#         vrf: default
+#         instance_tag: 1
+#         passive_interface_default: true
+#       when: inventory_hostname == "cs01"

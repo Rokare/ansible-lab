@@ -1,0 +1,26 @@
+---
+- name: back up from an Aoscx device
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    ansible_connection: network_cli
+    server01_ipv4: 10.10.10.2 
+    leaf01_ipv4: 172.16.2.1
+  gather_facts: False
+  tasks:
+    - name: ping server01
+      aoscx_command:
+        commands: ['ping {{server01_ipv4}}']
+      register: ping_management
+    - debug:
+        var: ping_management.stdout
+    
+    - name: ping leaf01
+      aoscx_command:
+        commands: ['ping {{leaf01_ipv4}}']
+      register: ping_leaf01
+
+    - debug:
+        var: ping_leaf01.stdout
+

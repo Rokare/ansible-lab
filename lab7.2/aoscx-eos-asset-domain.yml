@@ -1,0 +1,38 @@
+---
+- name: Assert domain name on Aoscx and Eos device
+  collections:
+    - arubanetworks.aoscx
+  hosts: network
+  vars:
+     domain: lab.example.com
+  tasks: 
+    - name: Get Domain name for Eos devices
+      eos_command:
+        commands:
+          - enable
+          - sh run | include domain
+      register: result
+      when: ansible_network_os == "eos"
+
+    - name: print result
+      debug:
+        msg: "{{ result }}"
+    
+    - name: Assert that domain equals {{ domain }}
+      assert:
+        that: "'{{ domain }}' in result.stdout[1]"
+      when: ansible_network_os == "eos"
+    
+
+
+    - name: Get Domain name for Aoscx devices
+      aoscx_command:
+        commands:
+          - show running-config | include domain
+      register: result
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
+
+    - name: Assert that domain equals "{{ domain }}"
+      assert:
+        that:  "'{{ domain }}' in result.stdout[0]"
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"

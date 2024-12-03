@@ -1,0 +1,16 @@
+---
+- name: back up from an Aoscx device
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars_files:
+    - vars/myvars.yml
+    #ansible_connection: network_cli
+  gather_facts: False
+  tasks:
+    - name: "test reachability from target to destination"
+      aoscx_command:
+        commands: ['ping {{dest}}']
+      register: ping_response
+    - debug:
+        var: ping_response.stdout

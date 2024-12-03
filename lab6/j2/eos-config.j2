@@ -1,0 +1,5 @@
+hostname {{ inventory_hostname }}
+dns domain {{ domain_name }}
+{% for nameserver in nameservers %}
+ip name-server vrf green {{ nameserver }}
+{% endfor %}

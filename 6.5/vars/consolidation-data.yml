@@ -1,0 +1,95 @@
+layer3_data:
+  cs01:   
+    - name: loopback0
+      ipv4: 172.16.0.1/32
+    - name: 1/1/2
+      ipv4: 172.16.2.2/30
+    - name: 1/1/4
+      ipv4: 172.16.10.1/30
+  
+  leaf01:
+    - name: Loopback0
+      ipv4: "10.0.0.11/32"
+    - name: eth1
+      ipv4: "10.10.10.1/30"
+    - name: eth5
+      ipv4: "10.10.5.2/30"
+    - name: eth6
+      ipv4: "10.10.7.2/30"
+  
+  leaf02:
+    - name: Loopback0
+      ipv4: 10.0.0.12/32
+    - name: eth2
+      ipv4: 192.168.10.1/30
+    - name: eth5
+      ipv4: 10.10.6.2/30
+    - name: eth6
+      ipv4: 10.10.8.2/30
+
+  spine01:
+    - name: Loopback0
+      ipv4: 10.0.0.1/32
+    - name: eth1
+      ipv4: 10.10.5.1/30
+    - name: eth2
+      ipv4: 10.10.6.1/30
+    - name: eth5
+      ipv4: 172.16.2.1/30
+
+  spine02:
+    - name: Loopback0
+      ipv4: 10.0.0.2/32
+    - name: eth1
+      ipv4: 10.10.7.1/30
+    - name: eth5
+      ipv4: 10.10.8.1/30
+
+interface_data:
+  cs01:
+    1/1/1:
+      description: management
+    1/1/2:
+      description: outside
+    1/1/4:
+      description: inside
+
+  spine01:
+    management0:
+      description: management
+    eth1:
+      description: leaf01
+    eth2:
+      description: leaf02
+    eth5:
+      description: outside
+
+  spine02:
+    management0:
+      description: management
+    eth1:
+      description: leaf01
+    eth2:
+      description: leaf02
+
+  leaf01:
+    management0:
+      description: management
+    eth1:
+      description: server01
+    eth5:
+      description: spine01    
+    eth6:
+      description: spine02   
+
+  leaf02:
+    management0:
+      description: management
+    eth2:
+      description: server02
+    eth5:
+      description: spine01    
+    eth6:
+      description: spine02   
+
+

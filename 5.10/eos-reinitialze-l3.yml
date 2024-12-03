@@ -1,0 +1,91 @@
+---
+- name: >
+    reintialize layer 3
+    on non-management interfaces
+    of Eos devices
+  hosts: eos
+  vars:
+    eth_intfs: []
+    non_mgmt_eth_intfs: []
+    mgmt_intf: eth0
+
+  tasks:
+
+    - name: send command to show interfaces
+      eos_command:
+        commands:
+          - enable
+          - show interfaces
+      register: r
+
+    - set_fact:
+        eth_intf_rows: "{{ r.stdout_lines[1]|select('search', 'Ethernet[0-9]')|list }}"
+
+    - name: show eth_intf_rows
+      debug:
+        var: "{{ item }}"
+      loop: "{{ eth_intf_rows }}"
+
+    - name: append to list
+      set_fact:
+        eth_intfs: "{{ eth_intfs + [item.split(' ')[0]] }}"
+      loop: "{{ eth_intf_rows }}"
+
+    - name: show ethernet interfaces
+      debug:
+        var: eth_intfs
+
+    - name: get non-management ethernet interfaces
+      set_fact: 
+        non_mgmt_eth_intfs: "{{ non_mgmt_eth_intfs + [item] }}"
+      loop: "{{ eth_intfs | reject('match', mgmt_intf) | list }}"
+
+    - name: show non-management ethernet interfaces
+      debug:
+        var: non_mgmt_eth_intfs
+
+    - name: remove IPv4 addresses
+      eos_l3_interfaces:
+        config:
+          - name: "{{ item }}"
+        state: deleted
+      loop: "{{ non_mgmt_eth_intfs }}"
+
+    - name: remove addresses from loopback
+      eos_l3_interfaces:
+        config:
+          - name: lo
+        state: deleted
+
+    - name: disable IPv6
+      eos_config:
+        lines:
+          - interface vlan 1
+          - no ipv6 address
+      
+        save_when: always
+
+    - name: remove interfaces descriptions
+      eos_interfaces:
+        config:
+          - name: "{{ item }}"
+        state: deleted
+      loop: "{{ non_mgmt_eth_intfs }}"
+
+    - name: disable OSPF
+      eos_config:
+        lines:
+          - no router ospf 1 
+          - no router ospf general
+        save_when: modified
+
+    # - name: reboot
+    #   eos_command:
+    #     commands:
+    #       - enable, reboot now
+    #   ignore_errors: yes
+
+    # - name: wait for restart
+    #   wait_for_connection:
+    #     delay: 20
+    #     timeout: 120

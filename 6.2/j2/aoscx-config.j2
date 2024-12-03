@@ -1,0 +1,10 @@
+auto-confirm
+hostname {{ inventory_hostname }}
+domain-name {{ domain_name }}
+vrf green
+{% for nameserver in nameservers %}
+ip dns server-address {{ nameserver }} 
+{% endfor %}
+logging {{ syslog_ipv4 }} tcp 514 severity {{ aoscx_loglevel }} vrf mgmt 
+access-list ip workstation
+10 permit tcp any {{ workstation_ipv4 | ipaddr('address') }}

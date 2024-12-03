@@ -1,0 +1,15 @@
+---
+- name: a reachability test
+  hosts: cs01
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    interesting_destination:
+    - 10.10.10.2
+    - 192.168.10.2
+  tasks:
+  - name: "Test reachability from {{ inventory_hostname }} to intesting destination"
+    aoscx_command:
+      commands: ['ping {{ item }}'] 
+    loop: "{{ interesting_destination }}"
+

@@ -1,0 +1,24 @@
+---
+- name: back up config and looks for at devices health indicators on eos devices
+  hosts: eos
+  
+  tasks:
+    - name: backup the device configuration
+      eos_config:
+        backup: yes
+
+    - name: look at devices health indicators
+      eos_command:
+        commands:
+          # this provides hostname and options
+          - enable
+          - sh ver | include Uptime
+          - sh clock
+          - sh ip name-server
+          - sh proc top memory once | include total
+      register: results
+
+    - name: show results
+      debug: 
+        msg: "{{ item }}"
+      loop: "{{ results.stdout_lines }}"   
