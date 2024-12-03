@@ -1,0 +1,19 @@
+---
+- name: Test jinja2 template for eos
+  hosts: network
+  vars:
+    ansible_connection: local
+    template_file: j2/eos-hn-dn-ns.j2
+
+  tasks:
+
+    - name: create config if not exists already
+      file:
+        path: config/
+        state: directory
+        mode: '0755'
+
+    - name: template cfg file
+      template:
+        src: "{{ template_file }}"
+        dest:  "{{ 'config/' + inventory_hostname + '.cfg' }}"

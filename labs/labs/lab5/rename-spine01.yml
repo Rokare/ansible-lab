@@ -1,0 +1,17 @@
+---
+- name: simple play to switch hostame of spine01
+  hosts: spine01
+  become: true
+  
+  tasks:
+    - name: back up config
+      eos_config:
+        backup: True
+
+    - name: change local hostame
+      eos_config:
+        lines:
+          - hostname spineA1
+
+
+

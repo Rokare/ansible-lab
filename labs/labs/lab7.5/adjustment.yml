@@ -1,0 +1,29 @@
+---
+- name: Ajustment phase for Spine01 & Spine02
+  become: true
+  hosts: spine01, spine02
+  vars_files:
+    - vars/adjustment-data.yml
+  tasks:
+    - name: Config description interfaces
+      eos_interfaces:
+        config:
+          - name: "{{ item.key }}"
+            description: "{{ item.value.description }}"
+      with_dict: "{{ new_interface_data[inventory_hostname] }}"
+
+    - name: config layer3 data
+      eos_l3_interfaces:
+        config:
+          - name: "{{ item.key }}"
+            ipv4:
+              - address: "{{ item.value.ipv4 }}"
+      with_dict: "{{ new_layer3_data[inventory_hostname] }}"
+
+    - name: set ospf passive for interfaces
+      arista.eos.eos_ospf_interfaces:
+        config:
+          - name: "eth3"
+            address_family:
+              - afi: "ipv4"
+                passive_interface: true

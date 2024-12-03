@@ -1,0 +1,14 @@
+new_layer3_data:
+  spine01:
+    eth3:
+      ipv4: 172.16.50.1/30
+  spine02:
+    eth3:
+      ipv4: 172.16.50.2/30
+new_interface_data:
+  spine01:
+    eth3:
+      description: spine02-as19216
+  spine02:
+    eth3:
+      description: spine01-as10101

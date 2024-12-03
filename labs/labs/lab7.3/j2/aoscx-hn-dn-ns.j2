@@ -1,0 +1,5 @@
+hostname {{ inventory_hostname }}
+domain-name {{ domain_name }}
+{% for ns in name_servers %}
+ip dns server-address {{ ns }}
+{% endfor %}

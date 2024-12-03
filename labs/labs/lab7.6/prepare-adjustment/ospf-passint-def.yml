@@ -1,0 +1,32 @@
+---
+- name: set Aoscx device to Ospf passive interface default
+  hosts: network
+  become: true
+  collections:
+    - arubanetworks.aoscx
+  vars:
+    passint_template: ../j2/aoscx-ospf-passint-def.j2
+    passint_cfg: config/aoscx-ospf-passint-def.cfg
+  
+  tasks:
+    - name: generate Cfg file Aoscx
+      template:
+        src: "{{ passint_template }}"
+        dest: "{{ passint_cfg }}"
+      when: inventory_hostname == "cs01"
+      
+    - name: configure OSPF 1 (process-id 1)
+      aoscx_config:
+        src: "{{ passint_cfg }}"
+      when: ansible_network_os == "arubanetworks.aoscx"
+
+    - name: do not use OSPF to advertise across AS boundaries on spines
+      arista.eos.eos_ospf_interfaces:
+        config:
+          - name: eth5
+            address_family:
+              - afi: "ipv4"
+                passive_interface: true
+      when: inventory_hostname in groups['spines']
+
+  

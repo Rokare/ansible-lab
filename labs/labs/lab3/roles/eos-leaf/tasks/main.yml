@@ -1,0 +1,8 @@
+---
+# tasks file for roles/eos-leaf
+- name: config leafs interfaces
+  eos_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        description: "{{ item.description }}"
+  loop: "{{ leaf_interfaces }}"

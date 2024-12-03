@@ -1,0 +1,25 @@
+---
+- name: Set spines interfaces description
+  hosts: eos
+  become: true
+
+  tasks:
+    - name: config spines interfaces
+      eos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description }}"
+      loop: "{{ spine_interfaces }}"  
+      when: inventory_hostname in groups['spines']
+
+    - name: config leafs interfaces
+      eos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description }}"
+      loop: "{{ leaf_interfaces }}"
+      when: inventory_hostname in groups['leafs']
+
+
+
+

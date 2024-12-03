@@ -1,0 +1,21 @@
+- name: show interface info on Aoscx and Eos devices
+  collections:
+    - arubanetworks.aoscx
+  hosts: network
+  tasks:
+
+    - name: Set domain name on Eos
+      eos_command:
+        commands:
+          - enable
+          - configure
+          - dns domain lab.example.com
+      when: ansible_network_os == "eos"
+
+    - name: Set domain name on Aoscx
+      aoscx_command:
+        commands:
+          - configure
+          - domain-name lab.example.com
+
+      when: ansible_network_os == "arubanetworks.aoscx.aoscx"
